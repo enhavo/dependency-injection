@@ -1,0 +1,41 @@
+
+export default class ParameterBag
+{
+    constructor() {
+        this._data = {};
+    }
+
+    set(key, value)
+    {
+        if (typeof key !== "string") {
+            throw "Key should be a string"
+        }
+
+        let parts = key.split(".");
+        let target = this._data;
+
+        while (parts.length > 1) {
+            let part = parts.shift();
+            target = target[part] = target[part] || {};
+        }
+
+        target[parts[0]] = value;
+    }
+
+    get(key)
+    {
+        if (typeof key !== "string") {
+            throw "Key should be a string"
+        }
+
+        let parts = key.split(".");
+        let temp = this._data;
+        for (let part of parts) {
+            if (!temp[part]) {
+                return null;
+            }
+            temp = temp[part];
+        }
+        return temp;
+    }
+}
